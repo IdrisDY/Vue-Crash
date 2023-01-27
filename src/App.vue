@@ -1,16 +1,45 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+  <Header title="Task Tracker" />
+  <Tasks :tasks="tasks"/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Header from './components/Header.vue'
+import Tasks from './components/tasks.vue'
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    Header,
+    Tasks
+  },
+  data(){
+    return {
+      tasks:[]
+    }
+  },
+  created() {
+      this.tasks = [{
+id:1,
+text:'Consultant Ward Round',
+day:'March 2nd at 2:30pm',
+reminder:true
+      },
+      {
+id:2,
+text:'Repute Meeting',
+day:'April 1st at 3:15pm',
+reminder:true
+      },
+      {
+id:3,
+text:'Call Muiz',
+day:'December 30 at 7am',
+reminder:false
+      }]
+    }
+
 }
 </script>
 
