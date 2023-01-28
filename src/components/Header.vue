@@ -2,7 +2,7 @@
    
    <header>
      {{title}}
-     <Button @click = 'onClick()' text="Add task"  bgcolor="green" />
+     <Button @click = 'onClick()' :text= " taskFunc? 'Close' :'Add task' "  :bgcolor=" taskFunc ? 'red' :'green'" />
      <!-- <Button text="Update task" bgcolor="blue" />
      <Button text="Remove task" bgcolor="red" /> -->
    </header>
@@ -16,14 +16,15 @@ export default {
       title:{
          type:String,
          default:'Hello World'
-      }
+      },
+      taskFunc:  Boolean
    },
    components:{
       Button
    },
    methods:{
       onClick(){
-         console.log('clicked');
+         this.$emit('showAddTask');
       }
    }
 }

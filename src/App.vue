@@ -1,43 +1,94 @@
 <template>
   <div>
-  <Header title="Task Tracker" />
-  <Tasks :tasks="tasks"/>
+  <AddTask v-if="showAddTask"  @addtask="addTask" />
+  <Header title="Task Tracker" @showAddTask="toggleAddTask" :taskFunc="showAddTask" />
+  <Tasks @delete-task="deleteTask" :tasks="tasks"  @toggle-task="toggleTask" />
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Tasks from './components/tasks.vue'
+import AddTask from './components/AddTask.vue'
 export default {
   name: 'App',
   components: {
     Header,
-    Tasks
+    Tasks,
+    AddTask
   },
   data(){
     return {
-      tasks:[]
+      tasks:[],
+      showAddTask:false
     }
   },
-  created() {
-      this.tasks = [{
-id:1,
-text:'Consultant Ward Round',
-day:'March 2nd at 2:30pm',
-reminder:true
-      },
+  methods:{
+    deleteTask(id){
+      console.log(id);
+      if (confirm('Are you sure?'))
       {
-id:2,
-text:'Repute Meeting',
-day:'April 1st at 3:15pm',
-reminder:true
-      },
-      {
-id:3,
-text:'Call Muiz',
-day:'December 30 at 7am',
-reminder:false
-      }]
+        this.tasks = this.tasks.filter((task) =>task.id !== id)
+      }
+    },
+    toggleTask(id){
+    console.log('toggled');
+    this.tasks =this.tasks.map((task)=>{
+      if (id === task.id){
+        return {...task, reminder:!task.reminder}
+      }
+      return task
+    })
+    },
+   async addTask(task){
+const res = await fetch ('http://localhost:5000/tasks',
+{
+  method:'POST',
+  headers:{
+'Content-Type':'application/json'
+  }
+  ,
+  body:JSON.stringify(task)
+}
+)
+const data = await res.json()
+console.log(data)
+this.tasks = [...this.tasks,data]
+console.log('pushed to array',this.tasks);
+setTimeout(() => {
+  this.showAddTask = false
+
+}, 600);
+    },
+    toggleAddTask(){
+      this.showAddTask = !this.showAddTask
+    },
+    async fetchTasks(){
+const res = await fetch ('http://localhost:5000/tasks')
+const data = await res.json()
+return data
+    }
+  },
+  async created() {
+    this.tasks = await this.fetchTasks()
+//       this.tasks = [{
+// id:1,
+// text:'Consultant Ward Round',
+// day:'March 2nd at 2:30pm',
+// reminder:true
+//       },
+//       {
+// id:2,
+// text:'Repute Meeting',
+// day:'April 1st at 3:15pm',
+// reminder:true
+//       },
+//       {
+// id:3,
+// text:'Call Muiz',
+// day:'December 30 at 7am',
+// reminder:false
+//       }]
     }
 
 }
@@ -48,7 +99,6 @@ reminder:false
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
