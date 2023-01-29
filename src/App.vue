@@ -24,18 +24,45 @@ export default {
     }
   },
   methods:{
-    deleteTask(id){
+    async deleteTask(id){
       console.log(id);
       if (confirm('Are you sure?'))
       {
-        this.tasks = this.tasks.filter((task) =>task.id !== id)
+        const resp = await fetch(`http://localhost:5000/tasks/${id}`,
+{
+  method:'DELETE',
+  headers:{
+'Content-Type':'application/json'
+  }
+})
+res.status === 200?(this.tasks = this.tasks.filter((task) =>task.id !== id)
+):alert('cant load tasks at this time')
       }
     },
-    toggleTask(id){
-    console.log('toggled');
+   async toggleTask(id)
+   {
+    const data = await fetch(`http://localhost:5000/tasks/${id}`)
+    const taskToggle = await data.json()
+    const updTask = {...taskToggle , reminder:!taskToggle.reminder}
+    console.log('toggled', taskToggle);
+
+
+    const res = await fetch(`http://localhost:5000/tasks/${id}`,
+{
+  method:'PUT',
+  headers:{
+'Content-Type':'application/json'
+  },
+  body:JSON.stringify(updTask)
+})
+
+const newTask = await res.json()
+
+console.log(newTask);
+
     this.tasks =this.tasks.map((task)=>{
       if (id === task.id){
-        return {...task, reminder:!task.reminder}
+        return {...task, reminder:!newTask.reminder}
       }
       return task
     })
@@ -61,7 +88,10 @@ setTimeout(() => {
 }, 600);
     },
     toggleAddTask(){
-      this.showAddTask = !this.showAddTask
+      setTimeout(() => {
+  this.showAddTask = !this.showAddTask
+
+}, 200);
     },
     async fetchTasks(){
 const res = await fetch ('http://localhost:5000/tasks')
