@@ -3,19 +3,23 @@
   <AddTask v-if="showAddTask"  @addtask="addTask" />
   <Header title="Task Tracker" @showAddTask="toggleAddTask" :taskFunc="showAddTask" />
   <Tasks @delete-task="deleteTask" :tasks="tasks"  @toggle-task="toggleTask" />
-  </div>
+<router-view></router-view>
+  <Footer/>
+</div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Tasks from './components/tasks.vue'
 import AddTask from './components/AddTask.vue'
+import Footer from './components/Footer.vue'
 export default {
   name: 'App',
   components: {
     Header,
     Tasks,
-    AddTask
+    AddTask,
+    Footer
   },
   data(){
     return {
@@ -35,7 +39,7 @@ export default {
 'Content-Type':'application/json'
   }
 })
-res.status === 200?(this.tasks = this.tasks.filter((task) =>task.id !== id)
+resp.status === 200?(this.tasks = this.tasks.filter((task) =>task.id !== id)
 ):alert('cant load tasks at this time')
       }
     },

@@ -1,22 +1,10 @@
 {
   "tasks": [
     {
-      "id": 2,
-      "text": "Repute Meeting",
-      "day": "April 1st at 3:15pm",
-      "reminder": true
-    },
-    {
-      "id": 3,
-      "text": "Call Muiz",
-      "day": "December 30 at 7am",
-      "reminder": true
-    },
-    {
-      "text": "Moving out Trenches",
-      "day": "Next year InshaAllah",
-      "reminder": false,
-      "id": 4
+      "text": "Moving Chairs",
+      "day": "June 30th , 2023",
+      "reminder": true,
+      "id": 1
     }
   ]
 }
